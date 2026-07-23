@@ -17,4 +17,13 @@ public class Transaction {
         this.amount = amount;
         this.category = category;
     }
+
+    private static void validate(String description, long amount) {
+        if (description == null || description.isBlank()) {
+            throw new InvalidTransactionException("Descrição da transação não pode ser vazia");
+        }
+        if (amount <= 0) {
+            throw new InvalidTransactionException("Valor da transação deve ser maior que zero");
+        }
+    }
 }
