@@ -12,6 +12,7 @@ public class Transaction {
     private Category category;
 
     public Transaction(String description, long amount, Category category) {
+        validate(description, amount);
         this.id = new TransactionId();
         this.description = description;
         this.amount = amount;
