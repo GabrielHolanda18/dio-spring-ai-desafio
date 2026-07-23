@@ -57,12 +57,22 @@ public class TransactionController {
         return listTransactionsByCategoryUseCase.execute(category).stream().map(TransactionResponse::from).toList();
     }
 
+    // Entrada de áudio do Usuário
     @PostMapping(value = "/ai", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "audio/mp3")
     ResponseEntity<Resource> transcribe(@RequestParam("file") MultipartFile file) {
+
+        // Traduz o audio do usuário em texto para IA decidir o que fazer
         var userMessage = transcriptionModel.transcribe(file.getResource());
+        /*
+            result guarda uma resposta gerada para a pessoa
+            exemplo:Certo, registrei um gasto de 80 reais na categoria mercado.
+         */
         var result = chatClient.prompt().user(userMessage).call().content();
 
+        // Transforma a resposta da IA em audio para devolver ao usuário
         byte[] audio = textToSpeechModel.call(result);
+
+        // Devolver o áudio para o cliente
         var resource = new ByteArrayResource(audio);
 
         return ResponseEntity.ok()
