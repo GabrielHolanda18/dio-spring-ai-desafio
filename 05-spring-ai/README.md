@@ -50,6 +50,23 @@ Um detalhe de design: o construtor `@AllArgsConstructor` (usado por
 proteger a *criação* de uma transação nova, não para revalidar dados que já
 foram persistidos anteriormente.
 
+## Melhoria adicional: documentação interativa via Swagger/OpenAPI
+
+Além da validação de domínio, adicionei o `springdoc-openapi-starter-webmvc-ui`,
+que gera automaticamente uma documentação interativa da API a partir do código
+existente (controllers, DTOs), sem exigir configuração manual de cada endpoint.
+
+Com a aplicação rodando, a documentação fica disponível em:
+http://localhost:8080/swagger-ui.html
+
+Os endpoints `POST /transactions` e `GET /transactions/{category}` podem ser
+testados diretamente pela interface, já que trabalham com JSON. O endpoint
+`POST /transactions/ai` também aparece documentado, mas por lidar com upload
+de arquivo (`multipart/form-data`) e retorno em áudio (`audio/mp3`), a
+experiência de teste direto pela UI é mais limitada — para esse fluxo, o teste
+via `curl`/Postman (descrito na seção "Como testar") continua sendo a forma
+mais confiável.
+
 ## Sobre o histórico de commits
 
 Segui commits pequenos e incrementais, tentando refletir a ordem real de
@@ -263,6 +280,9 @@ export OPENAI_API_KEY="sua_chave_aqui"
 Requer Docker Desktop ativo, já que o `compose.yml` sobe um MySQL
 automaticamente através do Docker Compose Support do Spring Boot.
 
+Após subir a aplicação, a documentação interativa fica disponível em
+`http://localhost:8080/swagger-ui.html`.
+
 Para rodar os testes:
 
 ```bash
@@ -281,6 +301,7 @@ unitário `TransactionTest` roda sempre, independentemente disso.
 - Spring Data JPA + MySQL (via Docker Compose)
 - Lombok
 - JUnit 5 + AssertJ
+- Springdoc OpenAPI (Swagger)
 
 ## Considerações finais
 
